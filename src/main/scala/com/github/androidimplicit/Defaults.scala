@@ -5,8 +5,10 @@ import android.graphics.BitmapFactory.Options
 import android.os.Bundle
 import android.support.v4.app._
 import android.support.v4.view._
+import android.text._
 import android.view._
 import android.widget._
+import android.widget.TextView.OnEditorActionListener
 
 object Defaults {
 
@@ -18,6 +20,38 @@ object Defaults {
   }
 
   implicit class RichTextView(textView: TextView) {
+
+    def withOnEditorActionListener(l: OnEditorActionListener): TextView = {
+      textView.setOnEditorActionListener(l)
+      textView
+    }
+
+    def withOnEditorAction(f: (TextView, Int, KeyEvent) => Boolean): TextView = {
+      withOnEditorActionListener(new OnEditorActionListener {
+        override def onEditorAction(v: TextView, actionId: Int, event: KeyEvent): Boolean = f(v, actionId, event)
+      })
+    }
+
+    def withTextChangedListener(watcher:TextWatcher): TextView = {
+      textView.addTextChangedListener(watcher)
+      textView
+    }
+
+    def withFilters(filters:Array[InputFilter]):TextView={
+      textView.setFilters(filters)
+      textView
+    }
+
+    def withMaxLines(maxlines: Int): TextView = {
+      textView.setMaxLines(maxlines)
+      textView
+    }
+
+    def withLines(lines: Int): TextView = {
+      textView.setLines(lines)
+      textView
+    }
+
     def withText(text: CharSequence) = {
       textView.setText(text)
       textView
@@ -25,6 +59,16 @@ object Defaults {
 
     def withTextColor(color: Int) = {
       textView.setTextColor(color)
+      textView
+    }
+
+    def withRawInputType(typ: Int): TextView = {
+      textView.setRawInputType(typ)
+      textView
+    }
+
+    def withImeOptions(typ: Int): TextView = {
+      textView.setImeOptions(typ)
       textView
     }
   }
