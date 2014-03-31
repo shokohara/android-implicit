@@ -7,6 +7,7 @@ import android.support.v4.app._
 import android.support.v4.view._
 import android.text._
 import android.view._
+import android.view.View.OnKeyListener
 import android.widget._
 import android.widget.TextView.OnEditorActionListener
 
@@ -81,6 +82,18 @@ object Defaults {
   }
 
   implicit class RichView[T <: View](view: T) {
+
+    def withOnKeyListener(l: OnKeyListener): T = {
+      view.setOnKeyListener(l)
+      view
+    }
+
+    def withOnKey(f: (View, Int, KeyEvent) => Boolean): T = {
+      view.withOnKeyListener(new OnKeyListener {
+        override def onKey(v: View, keyCode: Int, event: KeyEvent): Boolean = f(v, keyCode, event)
+      })
+    }
+
     def withId(id: Int) = {
       view.setId(id)
       view
