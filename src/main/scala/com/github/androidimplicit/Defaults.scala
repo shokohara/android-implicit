@@ -1,15 +1,18 @@
 package com.github.shoscala.androidimplicit
 
-import android.graphics._
+import android.animation.AnimatorSet
 import android.graphics.BitmapFactory.Options
+import android.graphics._
 import android.os.Bundle
 import android.support.v4.app._
 import android.support.v4.view._
 import android.text._
+import android.view.View.{OnClickListener, OnKeyListener}
 import android.view._
-import android.view.View.OnKeyListener
-import android.widget._
+import android.webkit._
+import android.widget.AdapterView.OnItemSelectedListener
 import android.widget.TextView.OnEditorActionListener
+import android.widget._
 
 object Defaults {
 
@@ -17,6 +20,17 @@ object Defaults {
     def withImageMatrix(matrix: Matrix) = {
       imageView.setImageMatrix(matrix)
       imageView
+    }
+  }
+
+  implicit class RichDatePicker(datePicker: DatePicker) {
+    def withMinDate(date: Long): DatePicker = {
+      datePicker.setMinDate(date)
+      datePicker
+    }
+    def withMaxDate(date: Long): DatePicker = {
+      datePicker.setMaxDate(date)
+      datePicker
     }
   }
 
@@ -33,12 +47,12 @@ object Defaults {
       })
     }
 
-    def withTextChangedListener(watcher:TextWatcher): TextView = {
+    def withTextChangedListener(watcher: TextWatcher): TextView = {
       textView.addTextChangedListener(watcher)
       textView
     }
 
-    def withFilters(filters:Array[InputFilter]):TextView={
+    def withFilters(filters: Array[InputFilter]): TextView = {
       textView.setFilters(filters)
       textView
     }
@@ -83,6 +97,11 @@ object Defaults {
 
   implicit class RichView[T <: View](view: T) {
 
+    def withOnClickListener(l: OnClickListener): T = {
+      view.setOnClickListener(l)
+      view
+    }
+
     def withOnKeyListener(l: OnKeyListener): T = {
       view.setOnKeyListener(l)
       view
@@ -96,6 +115,11 @@ object Defaults {
 
     def withId(id: Int) = {
       view.setId(id)
+      view
+    }
+
+    def withVisibility(visibility: Int): T = {
+      view.setVisibility(visibility)
       view
     }
 
@@ -116,8 +140,18 @@ object Defaults {
       bundle
     }
 
+    def withLong(key: String, value: Long) = {
+      bundle.putLong(key, value)
+      bundle
+    }
+
     def withString(key: String, value: String) = {
       bundle.putString(key, value)
+      bundle
+    }
+
+    def withBoolean(key: String, value: Boolean) = {
+      bundle.putBoolean(key, value)
       bundle
     }
   }
@@ -179,4 +213,72 @@ object Defaults {
       options
     }
   }
+
+  implicit class RichArrayAdapter[T](arrayAdapter: ArrayAdapter[T]) {
+    def withDropDownViewResource(resource: Int) = {
+      arrayAdapter.setDropDownViewResource(resource)
+      arrayAdapter
+    }
+  }
+
+  implicit class RichSpinner(spinner: Spinner) {
+    def withAdapter(adapter: SpinnerAdapter) = {
+      spinner.setAdapter(adapter)
+      spinner
+    }
+
+    def withOnItemSelectedListener(l: OnItemSelectedListener) = {
+      spinner.setOnItemSelectedListener(l)
+      spinner
+    }
+  }
+
+  implicit class RichExpandableListView(expandableListView: ExpandableListView) {
+    def withAdapter(adapter: ListAdapter) = {
+      expandableListView.setAdapter(adapter)
+      expandableListView
+    }
+
+    def withAdapter(adapter: ExpandableListAdapter) = {
+      expandableListView.setAdapter(adapter)
+      expandableListView
+    }
+
+    def withOnChildClickListener(onChildClickListener: ExpandableListView.OnChildClickListener) = {
+      expandableListView.setOnChildClickListener(onChildClickListener)
+      expandableListView
+    }
+
+    def withOnGroupClickListener(onGroupClickListener: ExpandableListView.OnGroupClickListener) = {
+      expandableListView.setOnGroupClickListener(onGroupClickListener)
+      expandableListView
+    }
+
+    def withOnGroupClickListener(onGroupCollapseListener: ExpandableListView.OnGroupCollapseListener) = {
+      expandableListView.setOnGroupCollapseListener(onGroupCollapseListener)
+      expandableListView
+    }
+  }
+
+  implicit class RichAnimatorSet(animatorSet: AnimatorSet) {
+    def withTarget(target: Object) = {
+      animatorSet.setTarget(target)
+      animatorSet
+    }
+  }
+
+  implicit class RichWebView(webView: WebView) {
+    def withWebViewClient(client: WebViewClient) = {
+      webView.setWebViewClient(client)
+      webView
+    }
+  }
+
+  implicit class RichWebSettings(webSettings: WebSettings) {
+    def withJavaScriptEnabled(flag: Boolean) = {
+      webSettings.setJavaScriptEnabled(flag)
+      webSettings
+    }
+  }
+
 }
